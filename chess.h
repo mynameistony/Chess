@@ -1,3 +1,12 @@
+/*TODO:
+*-Continue defining piece moves
+*
+*
+*
+*
+*
+*
+*/
 #pragma once
 
 using namespace std;
@@ -22,6 +31,7 @@ class MoveList{
 		};
 
 		void printMoves(){
+			cout << "R, C\tChoose:\n";
 			for(int i = 0; i < count; i++)
 				cout << moves[i]/10 << ", " << moves[i]%10 << "\t" << i+1 << endl;
 		};
@@ -79,16 +89,37 @@ class Board {
 				cerr << "Rook Selected at: " << r << ", " << c << endl;
 				cerr << "Can Move to : \n";
 
-				for(int testR = r; testR < 9; testR++){
-					cout << "Checking: " << testR << ", " << c << endl;
-					if(board[testR][c]->getPlayer() == 0){
+				for(int testR = r+1; testR < 9; testR++){
+					cerr << "Checking: " << testR << ", " << c << endl;
+					if(board[testR][c]->getPlayer() == currPlayer)break;
+					if(board[testR][c]->getPlayer() >= 0){
 						tmpMoves->addMove(testR,c);
 					}
 				}
 
-				for(int testR = r; testR > 0; testR--)
-					if(board[testR][c]->getPlayer() == 0)
+				for(int testR = r-1; testR > 0; testR--){
+					cerr << "Checking: " << testR << ", " << c << endl;
+					if(board[testR][c]->getPlayer() == currPlayer)break;
+					if(board[testR][c]->getPlayer() >= 0)
 						tmpMoves->addMove(testR,c);
+
+				}
+
+				for(int testC = c+1; testC < 9; testC++){
+					cerr << "Checking: " << r << ", " << testC << endl;
+					if(board[r][testC]->getPlayer() == currPlayer)break;
+					if(board[r][testC]->getPlayer() >= 0){
+						tmpMoves->addMove(r,testC);
+					}
+				}
+
+				for(int testC = c-1; testC > 0; testC--){
+					cerr << "Checking: " << r << ", " << testC << endl;
+					if(board[r][testC]->getPlayer() == currPlayer)break;
+					if(board[r][testC]->getPlayer() >= 0)
+						tmpMoves->addMove(r,testC);
+
+				}
 
 			break;
 

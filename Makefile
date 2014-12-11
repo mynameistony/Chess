@@ -3,7 +3,11 @@ chess:	main.cpp chess.h
 
 clean:
 	rm chessGame
+	rm err.txt
 	
 run: chess
+	./chessGame 2> err.txt
+
+debug: chess
 	./chessGame
 
