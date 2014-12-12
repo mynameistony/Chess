@@ -18,11 +18,25 @@ class MoveList{
 
 		int moves[];
 
+		bool checkValidMove(int thisChoice){
+			if(thisChoice > count || thisChoice < 1){
+				cout << "Invalid Move\n";
+				return false;
+			}
+			else
+				return true;
+		};
+
+		int getCount(){
+			return count;
+		};
+
 		MoveList(){
 			count = 0;
 		};
 	
 		void addMove(int r, int c){
+			cerr << r << ", " << c << " is move #" << count+1 << endl;
 			moves[count++] = (r * 10) + c;
 		};
 
@@ -72,8 +86,6 @@ class Board {
 
 	Piece* board[10][10];
 
-	MoveList* currMoves;
-
 	Piece* getPiece(int r, int c){
 		return board[r][c];
 	};
@@ -86,8 +98,8 @@ class Board {
 
 		switch(tolower(thisPiece->getType())){
 			case 'r':
-				cerr << "Rook Selected at: " << r << ", " << c << endl;
-				cerr << "Can Move to : \n";
+				cout << "Rook Selected at: " << r << ", " << c << endl;
+				cout << "Can Move to : \n";
 
 				for(int testR = r+1; testR < 9; testR++){
 					cerr << "Checking: " << testR << ", " << c << endl;
@@ -124,7 +136,42 @@ class Board {
 			break;
 
 			case 'h':
-				cout << "Knight Selected\n";
+				cout << "Horsie Selected at: " << r << ", " << c << endl;
+				cout << "Can Move to \n";
+
+				if(r < 8 && c < 7)
+					if((board[r+1][c+2]->getPlayer() >= 0) && (board[r+1][c+2]->getPlayer() != currPlayer))
+						tmpMoves->addMove(r+1,c+2); 				
+
+				if(r < 7 && c < 8)
+					if((board[r+2][c+1]->getPlayer() >= 0) && (board[r+2][c+1]->getPlayer() != currPlayer))
+						tmpMoves->addMove(r+2,c+1); 				
+
+				if(r > 1 && c > 0)
+					if((board[r-2][c-1]->getPlayer() >= 0) && (board[r-2][c-1]->getPlayer() != currPlayer))
+						tmpMoves->addMove(r-2,c-1); 				
+
+				if(r > 0 && c > 1)
+					if((board[r-1][c-2]->getPlayer() >= 0) && (board[r-1][c-2]->getPlayer() != currPlayer))
+						tmpMoves->addMove(r-1,c-2); 				
+
+				if(r < 8 && c > 1)
+					if((board[r+1][c-2]->getPlayer() >= 0) && (board[r+1][c-2]->getPlayer() != currPlayer))
+						tmpMoves->addMove(r+1,c-2); 				
+
+				if(r > 0 && c < 7)
+					if((board[r-1][c+2]->getPlayer() >= 0) && (board[r-1][c+2]->getPlayer() != currPlayer))
+						tmpMoves->addMove(r-1,c+2); 				
+
+				if(r < 7 && c > 0)
+					if((board[r+2][c-1]->getPlayer() >= 0) && (board[r+2][c-1]->getPlayer() != currPlayer))
+						tmpMoves->addMove(r+2,c-1); 				
+
+				if(r > 1 && c < 8)
+					if((board[r-2][c+1]->getPlayer() >= 0) && (board[r-2][c+1]->getPlayer() != currPlayer))
+						tmpMoves->addMove(r-2,c+1); 				
+		
+
 			break;
 
 			case 'b':
@@ -140,8 +187,8 @@ class Board {
 			break;
 
 			case 'p':
-				cerr << "Pawn Selected at: " << r << ", " << c << endl;
-				cerr << "Can move to: \n";
+				cout << "Pawn Selected at: " << r << ", " << c << endl;
+				cout << "Can move to: \n";
 
 				switch(currPlayer){
 					
@@ -191,19 +238,31 @@ class Board {
 
 				}
 			break;
+
+			default:
+				cerr << "Undefined piece selected";
+			break;
 		}
 
 		return tmpMoves;
 	};
 
 	void printBoard(){
-		cout << "$|0|1|2|3|4|5|6|7|8|$\n";
+		cout << " C|1|2|3|4|5|6|7|8||\n";
 
 		for(int r = 0; r < 10; r++){
-			cout << r <<'|';
+			
+			if(r == 0)
+				cout << "R|";
+			else
+				cout << r <<'|';
 
-			for(int c = 0; c < 10; c++)
-				cout << board[r][c]->getType() << '|';
+			for(int c = 0; c < 10; c++){
+				cout << board[r][c]->getType();
+			
+				if(c !=0 && c != 9)
+					cout << '|';
+			}
 
 			cout << endl;
 		}
@@ -331,8 +390,6 @@ class Board {
 
 		board[startR][startC] = new Piece(0,'-');
 
-
-
 	};
 
 	
@@ -358,26 +415,33 @@ class Game {
 			cout << "Player " << currPlayer << "'s Turn" << endl;
 			thisBoard.printBoard();
 
-			int startR, startC, endR, endC;
+		
+
+			int startR, startC, input;
 			
 			do{				
-				cout << "Enter Row: ";
-				cin >> startR;
 
-				cout << "Enter Col: ";
-				cin >> startC;
+				cout << "Enter Row, then Col, then press Enter\n";
+
+				cin >> input;
+
+				startR = input/10;
+
+				startC = input%10;
 
 			}while(!checkValidChoice(currPlayer,startR,startC));
 						
 			MoveList* theseMoves = thisBoard.getMoves(currPlayer, startR, startC);
 			
-			cout << "Count: " << theseMoves->count << endl;
 			theseMoves->printMoves();
 
 			int moveChoice = 0;
 
-			cout << "Move to: ";
-			cin >> moveChoice;
+			do{
+				cout << "Move to: ";
+				cin >> moveChoice;
+
+			}while(!theseMoves->checkValidMove(moveChoice));
 
 			thisBoard.movePiece(startR, startC, theseMoves, moveChoice-1);
 
