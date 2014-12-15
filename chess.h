@@ -96,12 +96,14 @@ class Board {
 
 		MoveList* tmpMoves = new MoveList();
 
+		int testR, testC;
+
 		switch(tolower(thisPiece->getType())){
 			case 'r':
 				cout << "Rook Selected at: " << r << ", " << c << endl;
 				cout << "Can Move to : \n";
 
-				for(int testR = r+1; testR < 9; testR++){
+				for(testR = r+1; testR < 9; testR++){
 					cerr << "Checking: " << testR << ", " << c << endl;
 					if(board[testR][c]->getPlayer() == currPlayer)break;
 					if(board[testR][c]->getPlayer() >= 0){
@@ -109,7 +111,7 @@ class Board {
 					}
 				}
 
-				for(int testR = r-1; testR > 0; testR--){
+				for(testR = r-1; testR > 0; testR--){
 					cerr << "Checking: " << testR << ", " << c << endl;
 					if(board[testR][c]->getPlayer() == currPlayer)break;
 					if(board[testR][c]->getPlayer() >= 0)
@@ -117,7 +119,7 @@ class Board {
 
 				}
 
-				for(int testC = c+1; testC < 9; testC++){
+				for(testC = c+1; testC < 9; testC++){
 					cerr << "Checking: " << r << ", " << testC << endl;
 					if(board[r][testC]->getPlayer() == currPlayer)break;
 					if(board[r][testC]->getPlayer() >= 0){
@@ -125,7 +127,7 @@ class Board {
 					}
 				}
 
-				for(int testC = c-1; testC > 0; testC--){
+				for(testC = c-1; testC > 0; testC--){
 					cerr << "Checking: " << r << ", " << testC << endl;
 					if(board[r][testC]->getPlayer() == currPlayer)break;
 					if(board[r][testC]->getPlayer() >= 0)
@@ -177,7 +179,6 @@ class Board {
 			case 'b':
 				cout << "Bishop Selected at " << r << ", " << c << endl;
 				cout << "Can Move to : \n";
-				int testR, testC;
 
 				for(testR = r+1,testC = c+1;testR < 9; testR++, testC++){
 					cerr << "Checking: " << testR << ", " << testC << endl;
@@ -227,7 +228,84 @@ class Board {
 			break;
 
 			case 'q':
-				cout << "Queen Selected\n";
+				cout << "Queen Selected at\n";
+
+
+				for(testR = r+1,testC = c+1;testR < 9; testR++, testC++){
+					cerr << "Checking: " << testR << ", " << testC << endl;
+					if(board[testR][testC]->getPlayer() == currPlayer)break;
+
+					if(board[testR][testC]->getPlayer() == 0)
+						tmpMoves->addMove(testR,testC);
+
+					if(board[testR][testC]->getPlayer() > 0){	
+						tmpMoves->addMove(testR,testC);
+						break;
+					}
+				}
+
+				for(testR = r+1, testC = c-1; testR < 9; testR++, testC--){
+					cerr << "Checking: " << testR << ", " << testC << endl;
+					if(board[testR][testC]->getPlayer() == currPlayer)break;
+					if(board[testR][testC]->getPlayer() >= 0){
+						tmpMoves->addMove(testR,testC);
+						break;
+					}
+				}
+
+				for(testR = r-1, testC = c+1; testR > 0; testR--, testC++){
+					cerr << "Checking: " << testR << ", " << testC << endl;
+					if(board[testR][testC]->getPlayer() == currPlayer)break;
+					if(board[testR][testC]->getPlayer() >= 0){
+						tmpMoves->addMove(testR,testC);
+						break;
+					}
+
+				}
+
+				for(testR = r-1,testC = c-1; testR > 0; testR--, testC--){
+					cerr << "Checking: " << testR << ", " << testC << endl;
+					if(board[testR][testC]->getPlayer() == currPlayer)break;
+					if(board[testR][testC]->getPlayer() >= 0){
+						tmpMoves->addMove(testR,testC);
+						break;
+					}
+
+				}
+
+				for(testR = r+1; testR < 9; testR++){
+					cerr << "Checking: " << testR << ", " << c << endl;
+					if(board[testR][c]->getPlayer() == currPlayer)break;
+					if(board[testR][c]->getPlayer() >= 0){
+						tmpMoves->addMove(testR,c);
+					}
+				}
+
+				for(testR = r-1; testR > 0; testR--){
+					cerr << "Checking: " << testR << ", " << c << endl;
+					if(board[testR][c]->getPlayer() == currPlayer)break;
+					if(board[testR][c]->getPlayer() >= 0)
+						tmpMoves->addMove(testR,c);
+
+				}
+
+				for(testC = c+1; testC < 9; testC++){
+					cerr << "Checking: " << r << ", " << testC << endl;
+					if(board[r][testC]->getPlayer() == currPlayer)break;
+					if(board[r][testC]->getPlayer() >= 0){
+						tmpMoves->addMove(r,testC);
+					}
+				}
+
+				for(testC = c-1; testC > 0; testC--){
+					cerr << "Checking: " << r << ", " << testC << endl;
+					if(board[r][testC]->getPlayer() == currPlayer)break;
+	 				if(board[r][testC]->getPlayer() >= 0)
+						tmpMoves->addMove(r,testC);
+
+				}
+
+
 			break;
 
 			case 'p':
