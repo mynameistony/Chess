@@ -1,3 +1,0 @@
-Rook Selected at: 1, 1
-Can Move to : 
-Checking: 1, 1
