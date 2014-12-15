@@ -175,7 +175,51 @@ class Board {
 			break;
 
 			case 'b':
-				cout << "Bishop Selected\n";
+				cout << "Bishop Selected at " << r << ", " << c << endl;
+				cout << "Can Move to : \n";
+				int testR, testC;
+
+				for(testR = r+1,testC = c+1;testR < 9; testR++, testC++){
+					cerr << "Checking: " << testR << ", " << testC << endl;
+					if(board[testR][testC]->getPlayer() == currPlayer)break;
+
+					if(board[testR][testC]->getPlayer() == 0)
+						tmpMoves->addMove(testR,testC);
+
+					if(board[testR][testC]->getPlayer() > 0){	
+						tmpMoves->addMove(testR,testC);
+						break;
+					}
+				}
+
+				for(testR = r+1, testC = c-1; testR < 9; testR++, testC--){
+					cerr << "Checking: " << testR << ", " << testC << endl;
+					if(board[testR][testC]->getPlayer() == currPlayer)break;
+					if(board[testR][testC]->getPlayer() >= 0){
+						tmpMoves->addMove(testR,testC);
+						break;
+					}
+				}
+
+				for(testR = r-1, testC = c+1; testR > 0; testR--, testC++){
+					cerr << "Checking: " << testR << ", " << testC << endl;
+					if(board[testR][testC]->getPlayer() == currPlayer)break;
+					if(board[testR][testC]->getPlayer() >= 0){
+						tmpMoves->addMove(testR,testC);
+						break;
+					}
+
+				}
+
+				for(testR = r-1,testC = c-1; testR > 0; testR--, testC--){
+					cerr << "Checking: " << testR << ", " << testC << endl;
+					if(board[testR][testC]->getPlayer() == currPlayer)break;
+					if(board[testR][testC]->getPlayer() >= 0){
+						tmpMoves->addMove(testR,testC);
+						break;
+					}
+
+				}
 			break;
 
 			case 'k':
@@ -385,25 +429,22 @@ class Board {
 	void movePiece(int startR, int startC, MoveList* movelist,int index){
 		int newR = movelist -> getMove(index) / 10;
 		int newC = movelist -> getMove(index) % 10;
-
 		board[newR][newC] = board[startR][startC];
 
 		board[startR][startC] = new Piece(0,'-');
-
 	};
-
-	
 };
 
 class Game {
 
 	public:
+		Board thisBoard;
+
 		Game(){
 			currPlayer = 1;
 			emptySpace = new Piece(0,'-');
 		};
 
-		Board thisBoard;
 
 		void clearScreen(){
 			for(int i = 0; i < 25; i++)
@@ -469,8 +510,6 @@ class Game {
 				return true;
 
 		};
-
-		
 
 		Piece* emptySpace;
 		int currPlayer;
