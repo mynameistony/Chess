@@ -16,7 +16,7 @@ class MoveList{
 
 		int count;
 
-		int moves[];
+		int moves[20];
 
 		bool checkValidMove(int thisChoice){
 			if(thisChoice > count || thisChoice < 1){
@@ -376,6 +376,9 @@ class Board {
 			
 			if(r == 0)
 				cout << "R|";
+			else
+			if(r == 9)
+				cout << "||";
 			else
 				cout << r <<'|';
 
